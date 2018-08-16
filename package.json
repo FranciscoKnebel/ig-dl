@@ -1,0 +1,67 @@
+{
+  "name": "ig-dl",
+  "version": "0.1.0",
+  "description": "Description",
+  "main": "index.js",
+  "scripts": {
+    "start": "node cli.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run build:bundle && npm run build:minify && npm run build:executable",
+    "build:bundle": "rollup -c",
+    "build:minify": "uglifyjs bin/cli.js --compress --mangle >> bin/cli.min.js",
+    "build:executable": "chmod +x bin/cli.min.js bin/cli.js"
+  },
+  "bin": {
+    "ig-dl": "bin/cli.min.js"
+  },
+  "preferGlobal": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FranciscoKnebel/ig-dl.git"
+  },
+  "author": "Francisco Knebel <franciscopaivaknebel@gmail.com> (https://github.com/FranciscoKnebel/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FranciscoKnebel/ig-dl/issues"
+  },
+  "homepage": "https://github.com/FranciscoKnebel/ig-dl#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "commander": "^2.17.1",
+    "dotenv": "^6.0.0",
+    "fs-extra": "^7.0.0",
+    "moment": "^2.22.2",
+    "puppeteer": "^1.6.2",
+    "request": "^2.87.0",
+    "request-promise-native": "^1.0.5",
+    "requestretry": "^2.0.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.6",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "babelify": "^8.0.0",
+    "bufferutil": "^4.0.0",
+    "bundle": "^16.2.2",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.6.1",
+    "regenerator-runtime": "^0.12.1",
+    "rollup": "^0.64.1",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-commonjs": "^9.1.5",
+    "rollup-plugin-json": "^3.0.0",
+    "rollup-plugin-multi-entry": "^2.0.2",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-replace": "^2.0.0",
+    "uglify-js": "^3.4.7",
+    "utf-8-validate": "^5.0.1"
+  }
+}
