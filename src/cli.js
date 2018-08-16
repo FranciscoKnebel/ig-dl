@@ -44,5 +44,25 @@ program
 		});
 	});
 
+program
+	.command('download')
+	.description('Download images already obtained from users.')
+	.option('-A, --all', `Download all pending images from all users. (default: ${defaultOptions.download.all})`)
+	.option('-U, --user <name>', 'Download all pending images from a user.')
+	.option('-D, --destination <path>', `Destination folder. (default: "${defaultOptions.dist}")`)
+	.action((cmd) => {
+		const opt = {
+			dist: cmd.destination || defaultOptions.dist
+		};
+
+		if (cmd.all) {
+			downloadAllUsers(opt.dist);
+		} else if (cmd.user) {
+			downloadCommand(cmd.user, opt);
+		} else {
+			console.log('"user" or "all" option needs to be defined.');
+		}
+	});
+
 
 program.parse(process.argv);
