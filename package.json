@@ -1,32 +1,34 @@
 {
-  "name": "ig-dl",
+  "name": "ig-down",
   "version": "0.1.0",
   "description": "Description",
   "main": "index.js",
   "scripts": {
     "start": "node cli.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build:bundle && npm run build:minify && npm run build:executable",
+    "build": "npm run clean && npm run build:bundle && npm run build:minify && npm run build:executable",
     "build:bundle": "rollup -c",
     "build:minify": "uglifyjs bin/cli.js --compress --mangle >> bin/cli.min.js",
-    "build:executable": "chmod +x bin/cli.min.js bin/cli.js"
+    "build:executable": "chmod +x bin/cli.min.js bin/cli.js",
+    "clean": "del bin/**/*.js"
   },
   "bin": {
-    "ig-dl": "bin/cli.min.js"
+    "ig-down": "bin/cli.min.js"
   },
   "preferGlobal": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FranciscoKnebel/ig-dl.git"
+    "url": "git+https://github.com/FranciscoKnebel/ig-down.git"
   },
   "author": "Francisco Knebel <franciscopaivaknebel@gmail.com> (https://github.com/FranciscoKnebel/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/FranciscoKnebel/ig-dl/issues"
+    "url": "https://github.com/FranciscoKnebel/ig-down/issues"
   },
-  "homepage": "https://github.com/FranciscoKnebel/ig-dl#readme",
+  "homepage": "https://github.com/FranciscoKnebel/ig-down#readme",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
+    "colors": "^1.3.1",
     "commander": "^2.17.1",
     "dotenv": "^6.0.0",
     "fs-extra": "^7.0.0",
@@ -48,6 +50,7 @@
     "babelify": "^8.0.0",
     "bufferutil": "^4.0.0",
     "bundle": "^16.2.2",
+    "del-cli": "^1.1.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.9.0",

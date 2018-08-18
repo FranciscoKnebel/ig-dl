@@ -43,10 +43,11 @@ export default {
 	external: [
 		'commander',
 		'puppeteer',
+		'path',
+		'fs',
 		'fs-extra',
 		'moment',
 		'requestretry',
-		'fs',
 		'request'
 	]
 };

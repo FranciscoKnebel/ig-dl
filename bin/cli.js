@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 'use strict';
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
@@ -2331,12 +2330,15 @@ function delayStrategy() {
 }
 
 /**
- * @param  {string} downloadUrl
+ * @param  {string} url
  * @param  {string} filename
  * @return {Promise}
  */
 function downloadAndSave(url, filename) {
-	request({
+	// TODO: Guarantee that the file will be downloaded or indicate the error
+	// to the user.
+	// TODO: only remove successfully download files from pending.txt
+	return request({
 		url: url,
 		delayStrategy: delayStrategy
 	}).pipe(fs$1__default.createWriteStream(filename)).on('close', function () {
@@ -2401,8 +2403,6 @@ function downloadAllUsers(dir) {
 	}
 }
 
-var pkg = require('../package.json');
-
 var defaultOptions = {
 	dist: 'dl',
 	user: {
@@ -2414,9 +2414,11 @@ var defaultOptions = {
 	}
 };
 
+var pkg = require('../package.json');
+
 program.version(pkg.version).description(pkg.description);
 
-program.command('user <name>').description('Get images from user.').option('-A, --amount <number>', 'The minimum amount of images expected to download. (default: ' + defaultOptions.user.amount + ')').option('-D, --destination <path>', 'Destination folder. (default: "' + defaultOptions.dist + '")').option('-S, --save', 'After getting the image links, download the image files. (default: ' + defaultOptions.user.save + ')').action(function (user, cmd) {
+program.command('user <name>').alias('u').description('Get images from user.').option('-A, --amount <number>', 'The minimum amount of images expected to download. (default: ' + defaultOptions.user.amount + ')').option('-D, --destination <path>', 'Destination folder. (default: "' + defaultOptions.dist + '")').option('-S, --save', 'After getting the image links, download the image files. (default: ' + defaultOptions.user.save + ')').action(function (user, cmd) {
 	var opt = {
 		user: user,
 		amount: cmd.amount || defaultOptions.user.amount,
@@ -2431,7 +2433,7 @@ program.command('user <name>').description('Get images from user.').option('-A, 
 	});
 });
 
-program.command('download').description('Download images already obtained from users.').option('-A, --all', 'Download all pending images from all users. (default: ' + defaultOptions.download.all + ')').option('-U, --user <name>', 'Download all pending images from a user.').option('-D, --destination <path>', 'Destination folder. (default: "' + defaultOptions.dist + '")').action(function (cmd) {
+program.command('download').alias('d').description('Download images already obtained from users.').option('-U, --user <name>', 'Download all pending images from a user.').option('-A, --all', 'Download all pending images from all users. (default: ' + defaultOptions.download.all + ')').option('-D, --destination <path>', 'Destination folder. (default: "' + defaultOptions.dist + '")').action(function (cmd) {
 	var opt = {
 		dist: cmd.destination || defaultOptions.dist
 	};
@@ -2445,4 +2447,14 @@ program.command('download').description('Download images already obtained from u
 	}
 });
 
+// error on unknown commands
+program.on('command:*', function () {
+	console.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '));
+	process.exit(1);
+});
+
 program.parse(process.argv);
+
+if (!process.argv.slice(2).length) {
+	program.outputHelp();
+}
