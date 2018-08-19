@@ -4,8 +4,9 @@ const pkg = require('../package.json');
 
 const { readFile, multilineComment } = require('../bin/lib');
 
-function buildBanner(prepend) {
+function buildBanner(prepend, title = '') {
 	const info = [
+		title, '',
 		`${pkg.name} - ${pkg.version} - ${moment().format('DD/MM/YYYY')}`,
 		pkg.homepage,
 		pkg.author,
@@ -16,5 +17,5 @@ function buildBanner(prepend) {
 	return `${prepend}\n${multilineComment(info)}\n${multilineComment(lines)}\n`;
 }
 
-module.exports = buildBanner('#!/usr/bin/env node');
+module.exports = title => buildBanner('#!/usr/bin/env node', title);
 

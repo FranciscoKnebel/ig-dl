@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 /**
+* ig-down CLI
+*
 * ig-down - 0.1.0 - 19/08/2018
 * https://github.com/FranciscoKnebel/ig-down#readme
 * Francisco Knebel <franciscopaivaknebel@gmail.com> (https://github.com/FranciscoKnebel/)
@@ -2068,11 +2070,12 @@ var _asyncToGenerator = unwrapExports(asyncToGenerator);
 
 moment.locale('pt-br');
 
-// Make sure the output directory is there.
 function mkdir(newDest) {
+	// Make sure the output directory is there.
 	fs$1.ensureDirSync(newDest);
 }
 
+// TIME & DATE
 function getTime() {
 	var append = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ':';
 

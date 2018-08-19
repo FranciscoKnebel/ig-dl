@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 /**
+* ig-down CLI
+*
 * ig-down - 0.1.0 - 19/08/2018
 * https://github.com/FranciscoKnebel/ig-down#readme
 * Francisco Knebel <franciscopaivaknebel@gmail.com> (https://github.com/FranciscoKnebel/)
