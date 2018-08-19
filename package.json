@@ -1,19 +1,19 @@
 {
   "name": "ig-down",
   "version": "0.1.0",
-  "description": "Description",
+  "description": "IG cli downloader.",
   "main": "index.js",
   "scripts": {
-    "start": "node cli.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run clean && npm run build:bundle && npm run build:minify && npm run build:executable",
-    "build:bundle": "rollup -c",
-    "build:minify": "uglifyjs bin/cli.js --compress --mangle >> bin/cli.min.js",
-    "build:executable": "chmod +x bin/cli.min.js bin/cli.js",
-    "clean": "del bin/**/*.js"
+    "start": "node src/cli.js",
+    "test": "eslint src build",
+    "build": "npm run build:setup && npm run build:bundle && npm run build:executable",
+    "build:setup": "del bin/**/*",
+    "build:bundle": "node build/bundle.js",
+    "build:executable": "chmod +x bin/cli bin/cli.js",
+    "dev": "npm run build:bundle --watch"
   },
   "bin": {
-    "ig-down": "bin/cli.min.js"
+    "ig-down": "bin/cli"
   },
   "preferGlobal": true,
   "repository": {
@@ -61,9 +61,9 @@
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-commonjs": "^9.1.5",
     "rollup-plugin-json": "^3.0.0",
-    "rollup-plugin-multi-entry": "^2.0.2",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-replace": "^2.0.0",
+    "rollup-plugin-uglify": "^4.0.0",
     "uglify-js": "^3.4.7",
     "utf-8-validate": "^5.0.1"
   }

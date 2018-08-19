@@ -1,13 +1,44 @@
+#!/usr/bin/env node
+
+/**
+* ig-down - 0.1.0 - 19/08/2018
+* https://github.com/FranciscoKnebel/ig-down#readme
+* Francisco Knebel <franciscopaivaknebel@gmail.com> (https://github.com/FranciscoKnebel/)
+*/
+
+/**
+* MIT License
+*
+* Copyright (c) 2018 Francisco Knebel
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*/
 'use strict';
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+var fs = require('fs');
+var fs$1 = require('fs-extra');
+var fs$1__default = _interopDefault(fs$1);
 var moment = _interopDefault(require('moment'));
-var fs = _interopDefault(require('fs-extra'));
 var puppeteer = _interopDefault(require('puppeteer'));
 var request = _interopDefault(require('requestretry'));
-var fs$1 = require('fs');
-var fs$1__default = _interopDefault(fs$1);
 var path = require('path');
 var program = _interopDefault(require('commander'));
 
@@ -2037,6 +2068,11 @@ var _asyncToGenerator = unwrapExports(asyncToGenerator);
 
 moment.locale('pt-br');
 
+// Make sure the output directory is there.
+function mkdir(newDest) {
+	fs$1.ensureDirSync(newDest);
+}
+
 function getTime() {
 	var append = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ':';
 
@@ -2045,11 +2081,6 @@ function getTime() {
 
 function log(msg) {
 	console.log(getTime(), msg);
-}
-
-// Make sure the output directory is there.
-function mkdir(newDest) {
-	fs.ensureDirSync(newDest);
 }
 
 function extractor() {
@@ -2286,7 +2317,7 @@ function scraper(opt) {
 						log('Done it!');
 
 						log('Creating file with image links for user \'' + user + '\'.');
-						stream = fs.createWriteStream(dist + '/' + user + '/pending.txt', { flags: 'a' });
+						stream = fs$1__default.createWriteStream(dist + '/' + user + '/pending.txt', { flags: 'a' });
 
 						for (i = 0; i < items.length; i += 1) {
 							item = items[i];
@@ -2294,7 +2325,7 @@ function scraper(opt) {
 							url = item.a + '/media/?size=l';
 
 
-							if (fs.existsSync(dir)) {
+							if (fs$1__default.existsSync(dir)) {
 								console.log('Skipping ' + item.id);
 							} else {
 								try {
@@ -2341,7 +2372,7 @@ function downloadAndSave(url, filename) {
 	return request({
 		url: url,
 		delayStrategy: delayStrategy
-	}).pipe(fs$1__default.createWriteStream(filename)).on('close', function () {
+	}).pipe(fs.createWriteStream(filename)).on('close', function () {
 		return log('Saved ' + url + ' to ' + filename);
 	});
 }
@@ -2350,7 +2381,7 @@ function download(user, opt) {
 	var dir = opt.dist + '/' + user;
 
 	log('Downloading images from "' + user + '..."');
-	fs$1__default.readFile(dir + '/pending.txt', 'utf8', function (err, data) {
+	fs.readFile(dir + '/pending.txt', 'utf8', function (err, data) {
 		if (err) {
 			throw err;
 		}
@@ -2364,14 +2395,14 @@ function download(user, opt) {
 			}
 		});
 
-		fs$1__default.unlinkSync(dir + '/pending.txt');
+		fs.unlinkSync(dir + '/pending.txt');
 	});
 }
 
 function downloadAllUsers(dir) {
 	var dirs = function dirs(p) {
-		return fs$1.readdirSync(p).filter(function (f) {
-			return fs$1.statSync(path.join(p, f)).isDirectory();
+		return fs.readdirSync(p).filter(function (f) {
+			return fs.statSync(path.join(p, f)).isDirectory();
 		});
 	};
 	var users = dirs(dir);

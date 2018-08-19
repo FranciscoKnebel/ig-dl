@@ -1,8 +1,9 @@
+/* eslint no-await-in-loop: 0 */
+
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
 
-import { log } from '../log';
-import mkdir from '../mkdir';
+import { mkdir, log } from '../tools';
 
 export function extractor() {
 	const extractedElements = document.querySelectorAll('img');

@@ -1,14 +1,13 @@
 // rollup.config.js
-import json from 'rollup-plugin-json';
-import babel from 'rollup-plugin-babel';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import replace from 'rollup-plugin-replace';
+const json = require('rollup-plugin-json');
+const babel = require('rollup-plugin-babel');
+const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs');
+const replace = require('rollup-plugin-replace');
 
-export default {
+module.exports = {
 	input: 'src/cli.js',
 	output: {
-		banner: '#!/usr/bin/env node',
 		file: 'bin/cli.js',
 		format: 'cjs'
 	},

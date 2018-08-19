@@ -1,8 +1,8 @@
 import request from 'requestretry';
-import fs, { readdirSync, statSync } from 'fs';
+import { createWriteStream, readFile, unlinkSync, readdirSync, statSync } from 'fs';
 import { join } from 'path';
 
-import { log } from '../log';
+import { log } from '../tools';
 
 function delayStrategy() {
 	// set delay of retry to a random number between 500 and 3500 ms
@@ -22,7 +22,7 @@ export function downloadAndSave(url, filename) {
 		url,
 		delayStrategy
 	})
-		.pipe(fs.createWriteStream(filename))
+		.pipe(createWriteStream(filename))
 		.on('close', () => log(`Saved ${url} to ${filename}`));
 }
 
@@ -30,7 +30,7 @@ export default function download(user, opt) {
 	const dir = `${opt.dist}/${user}`;
 
 	log(`Downloading images from "${user}..."`);
-	fs.readFile(`${dir}/pending.txt`, 'utf8', (err, data) => {
+	readFile(`${dir}/pending.txt`, 'utf8', (err, data) => {
 		if (err) {
 			throw err;
 		}
@@ -44,7 +44,7 @@ export default function download(user, opt) {
 			}
 		});
 
-		fs.unlinkSync(`${dir}/pending.txt`);
+		unlinkSync(`${dir}/pending.txt`);
 	});
 }
 
