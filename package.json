@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/cli.js",
-    "test": "eslint src build",
-    "build": "npm run build:setup && npm run build:bundle && npm run build:executable",
-    "build:setup": "del bin/**/*",
+    "test": "eslint src build spec",
+    "build": "npm run build:lib && npm run build:bundle && npm run build:executable",
     "build:bundle": "node build/bundle.js",
     "build:executable": "chmod +x bin/cli bin/cli.js",
+    "build:lib": "node build/lib.js",
     "dev": "npm run build:bundle --watch"
   },
   "bin": {
@@ -56,11 +56,13 @@
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.6.1",
+    "jasmine": "^3.2.0",
     "regenerator-runtime": "^0.12.1",
     "rollup": "^0.64.1",
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-commonjs": "^9.1.5",
     "rollup-plugin-json": "^3.0.0",
+    "rollup-plugin-multi-entry": "^2.0.2",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-replace": "^2.0.0",
     "rollup-plugin-uglify": "^4.0.0",

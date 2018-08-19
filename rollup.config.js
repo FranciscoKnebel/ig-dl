@@ -4,6 +4,7 @@ const babel = require('rollup-plugin-babel');
 const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const replace = require('rollup-plugin-replace');
+const multiEntry = require('rollup-plugin-multi-entry');
 
 module.exports = {
 	input: 'src/cli.js',
@@ -12,6 +13,7 @@ module.exports = {
 		format: 'cjs'
 	},
 	plugins: [
+		multiEntry(),
 		replace({
 			delimiters: ['', ''],
 			'#!/usr/bin/env node': ''

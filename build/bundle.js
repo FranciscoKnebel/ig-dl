@@ -1,9 +1,5 @@
 const rollup = require('rollup');
 const { minify } = require('uglify-js');
-const { writeFile } = require('fs');
-const moment = require('moment');
-
-moment.locale('pt-br');
 
 const {
 	input, output, plugins, external
@@ -11,13 +7,7 @@ const {
 
 const banner = require('./banner');
 
-function getTime(append = ':') {
-	return `${moment().format('DD/MM/YYYY-HH:mm:ss')}${append}`;
-}
-
-function log(msg) {
-	console.log(getTime(), msg);
-}
+const { log, prependAndSave } = require('../bin/lib');
 
 async function build() {
 	log('Creating rollup bundle...');
@@ -45,7 +35,7 @@ async function build() {
 function finish({ code, minified }) {
 	const original = output.file;
 	log(`Saving ${original} file...`);
-	writeFile(output.file, banner + code, (err) => {
+	prependAndSave(output.file, banner, code, (err) => {
 		if (err) {
 			return console.error(err);
 		}
@@ -54,7 +44,7 @@ function finish({ code, minified }) {
 
 	const minifiedFile = output.file.split('.js')[0];
 	log(`Saving ${minifiedFile} file...`);
-	writeFile(minifiedFile, banner + minified, (err) => {
+	prependAndSave(minifiedFile, banner, minified, (err) => {
 		if (err) {
 			return console.error(err);
 		}

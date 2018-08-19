@@ -1,21 +1,8 @@
-const { readFileSync } = require('fs');
 const moment = require('moment');
 
 const pkg = require('../package.json');
 
-function multilineComment(lines) {
-	return `\n/**${
-		lines
-			.map(line => `\n*${line.length > 0 ? ` ${line}` : ''}`)
-			.join('')
-	}/`;
-}
-
-function readFile(path) {
-	return readFileSync(path, 'utf8')
-		.toString()
-		.split('\n');
-}
+const { readFile, multilineComment } = require('../bin/lib');
 
 function buildBanner(prepend) {
 	const info = [
