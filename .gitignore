@@ -1,4 +1,6 @@
 dl
+bin/lib.js
+bin/cli.js
 
 # Logs
 logs

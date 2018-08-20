@@ -1,20 +1,22 @@
 module.exports = {
-	extends: 'airbnb',
-	plugins: ['react', 'jsx-a11y', 'import'],
+	extends: [
+		'airbnb',
+		'plugin:ava/recommended'
+	],
+	plugins: ['react', 'jsx-a11y', 'import', 'ava'],
 	env: {
 		browser: true,
 		node: true,
 		es6: true,
 		jasmine: true
 	},
-	"parser": "babel-eslint",
-	"parserOptions": {
-		"sourceType": "module",
-		"allowImportExportEverywhere": false,
-		"codeFrame": false
+	parser: 'babel-eslint',
+	parserOptions: {
+		sourceType: "module",
+		allowImportExportEverywhere: false,
+		codeFrame: false
 	},
 	rules: {
-		indent: [2, 'tab'],
 		'no-tabs': 0,
 		'consistent-return': 0,
 		strict: 0,

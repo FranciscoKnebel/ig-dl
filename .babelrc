@@ -1,19 +1,17 @@
 {
   "presets": [
-
     [
-      "env",
+      "@babel/env",
       {
         "modules": false
       }
     ]
   ],
   "plugins": [
-    "external-helpers",
+    "@babel/plugin-external-helpers",
     [
-      "transform-runtime",
+      "@babel/plugin-transform-runtime",
       {
-        "polyfill": false,
         "regenerator": true
       }
     ]
