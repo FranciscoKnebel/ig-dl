@@ -1,11 +1,11 @@
 export default {
   files: [
-    './tests/**/*.test.js'
+    'tests/**/**/*.test.js'
   ],
   sources: [
-    './src/commands/**/*',
-    './src/**/*',
-    '!./src/**/cli.js'
+    'src/commands/**/*',
+    'src/**/*',
+    '!src/**/cli.js'
   ],
   require: [
     'esm'
