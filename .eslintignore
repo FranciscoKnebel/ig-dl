@@ -1,0 +1,5 @@
+tests/mocks/**/*
+**/*.mock.js
+tests/**/_*
+_**/**/*
+tests/helpers/matchers/**/*
