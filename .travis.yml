@@ -1,22 +1,25 @@
 language: node_js
 node_js:
 - node
-
 addons:
   apt:
     packages:
-      - fakeroot
-
+    - fakeroot
 before_deploy:
-  - "npm run build"
+- npm run build
 
 deploy:
-  provider: releases
-  api_key:
-    secure: MlfKyZtLHvTys776AZ3o3btQQTtEUH2ePWSH98OX39TY/q6NBeoSAUkvbDkawB2ramHtLmuMj2dNE0hcSg2Fmo+vrQu1NQ6iUQeZPClzainwlAH3bmeBqDJFKyFK0vxXVWceiLLQo5QgUtfb+xsRbxQHXkFeg4Rllxj6pr001S+qhI08oz9gtRTeBBLyOuinSC5y2lpfLyxbB+Ym13Or5ngDhuASH8jQS+wRjWs1/LOkldVANK3qx4RQVhbEJYkA121FTHsG77hWNpTc7TXu4iFCPRVUq+eyl2rB/+vZDQpcA8sew5NdAbG/ovSm/5nDnZti+7pxBC12ykwA5WPS51GxOOFk36AmvdV/PPHRcFxf1cy6OrrrnmLAkn2EEdHCKvPrJGLGr2B7wihiH/B4nJBBd/KMsg/UkfSmtkXDKR9SywRqKKxg2u56d1pvQlVh1wV56iHwUi5nZnMrEOsGkZjVzEcUuShNg2Z1TD2fuYxREM+8YrtzIbIPonXyj7mk6zsxTEansMjOS1SZpqOnGiNARaMcOx/J4QYSMB0e3Z0cmvvnTcm0K4/ad/2VqAXhNK7u/CQGBiqpjSAnv+hGZHXxgpCQkaygQalrPTWoP9pNIoKWAloOBtHC6uxu3DZPNv6txECbH+Ky3GwPlrRiI2nyQicUP6yGzg8cUh7lczM=
-  file_glob: true
-  file: bin/cli
-  skip_cleanup: true
-  on:
-    tags: true
-    repo: FranciscoKnebel/ig-down
+  - provider: npm
+    email: franciscopaivaknebel@gmail.com
+    api_key:
+      secure: dna0Oc24BT6lITSM5naokyU4GkY1EyMGqbKgpO1mUC35Hn2zcXgkANThZEjiWrRfzzA33/J2oZTFi7COP0i50Lrl5RbjFWnkIAJofFyeh5DzOk8VRG8FQgsStx4n9Yp+DhlkxckXu/89Q1RQTpg1L1zq521KxNL5srtGkxHG8H82XIMociy0JDgfDZKN8Da9RYfIqbV0OzvU/aEa4jR1gt/y+tbMtKSMgzo3LgMG3rN1JLm9qiilfyNvBKyHITzgdXPTpY39xwOEhqyAEsu1ZVw7xKUuV8n56HeZIZlApM0eRkFSLwQ+ElSCWBoy0jZdKBMkIft3imNh8vihwnUpRAaFxzj6+7Djf0UWzwOWg+rx/HM6yt6lwn9QnKxOVClmZl8u2bQsbznfgbXV+YMQopX/NSO9WcFrC6C3SSYp223xFZRGaH6GNMubGEOwhCqPIcvfXVAUYweWS3Cbwkgg3bY0Nx6C81LBYMQ6b5dV+YQXmX83X8Ze/1EDqksM9HWjFORIGyLGtziqkvUuLnB0za1faADtkpIcLSz/S3uQKco8bvB+RGYJc0c1g/UTmM8bH7VRQd2R6Qsb9vcz6fJiafyV/wCavKFwE6HEI5+p7fn5g7t7szqPkQT7M/oe0KEnDdj9hKRgTkZJDaYFpVq46TnyXBPVsxEyoF0QUPzxWB8=
+    on:
+      tags: true
+      repo: FranciscoKnebel/ig-down
+  - provider: releases
+    api_key:
+      secure: HBr8O7y+qWuOEuIfXEgTcfIBETyaUAl7ZTrmjkSAbKppUQibEd9i0n5JCCi5sp0unWScrhVmhbnPPWt1+D3n2336yXLIdBpqqoscQ20gbtGjEKv/2+vxm/4ynqQNrD6cbjGvXXxKjfdm26kXlkRbOl97SGSuwMT7jwluJ0lhmtQCADJHbjoqvmI/wOMCA2mUzSwUk9Cp+PkMXSAD/jPSdLMFiLX1Mr+xshyJwxe6wtw+7KDYqaUuNBstUhTY2Yd1DagkqMZ0/jpFE8soXgu/7WmRnUjUo8pEF1tqjkTVU9Wy19vdHTzLPm6AGjoBm8Di1X9yzU7p4x5Gs7a4FET/YjwgA5TT7pP4zImojBLLhc//aXc01TEF5HIy4t7Xobu0YJ4T3fLUnPR06IPXb5uAF7OZxenxz1dzKkBgR9P0/O52ADVNTU7KK0czbRbB3OP98rWyQOLsGvCo70vC4PbruGgEQQPegSIvRDYi8OPibZmRYYaQq0k+9A/tF+RiF5waQLi7+84J31S/padtqXZ0aGm0/zzfGbPUnA9JSYlphZEUpuEwUo6jDw8v704jC2baJrJuEkurKfgmnqvap9UUTnbTf99cbQ16qLXI2V8KkJ6w4H8adLe8McgdgwwPm2HB+DH/jRNy86lXGK9koj7eyq1wScf0ReowWZRd2780bO4=
+    file: bin/cli
+    on:
+      tags: true
+      repo: FranciscoKnebel/ig-down
