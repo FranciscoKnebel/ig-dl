@@ -1,12 +1,13 @@
 // Bundles the CLI into a single commonJS file, for command line usage.
 
+import * as rollup from 'rollup';
 import { minify } from 'uglify-js';
 
 import { log, prependAndSave } from '../src/tools';
 import { input, output, plugins, external } from '../rollup.config';
 import genBanner from './banner';
 
-const rollup = require('rollup');
+// const rollup = require('rollup');
 
 const banner = genBanner('ig-down CLI');
 

@@ -4,20 +4,15 @@
   "description": "IG CLI downloader.",
   "main": "index.js",
   "scripts": {
-    "start": "node src/cli.js",
+    "start": "node -r esm src/cli.js",
     "test": "npm run test:lint && npm run test:ava",
     "test:lint": "eslint src build tests",
     "test:ava": "ava",
-    "build": "npm run build:lib && npm run build:bundle && npm run build:executable",
-    "build:lib": "node -r esm build/lib.js",
+    "build": "npm run build:bundle && npm run build:executable",
     "build:bundle": "node -r esm build/bundle.js",
     "build:executable": "chmod +x bin/cli bin/cli.js",
     "dev": ""
   },
-  "bin": {
-    "ig-down": "bin/cli"
-  },
-  "preferGlobal": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FranciscoKnebel/ig-down.git"
@@ -73,5 +68,12 @@
     "tempy": "^0.2.1",
     "uglify-js": "^3.4.7",
     "utf-8-validate": "^5.0.1"
-  }
+  },
+  "bin": {
+    "ig-down": "bin/cli"
+  },
+  "files": [
+    "bin/**/*"
+  ],
+  "preferGlobal": true
 }

@@ -6,7 +6,7 @@ import downloadCommand, { downloadAllUsers } from './commands/download';
 
 import defaultOptions from './default';
 
-const pkg = require('../package.json');
+import pkg from '../package.json';
 
 program
   .version(pkg.version)

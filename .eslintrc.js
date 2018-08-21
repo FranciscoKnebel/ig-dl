@@ -17,7 +17,6 @@ module.exports = {
 		codeFrame: false
 	},
 	rules: {
-		'no-tabs': 0,
 		'consistent-return': 0,
 		strict: 0,
 		'linebreak-style': 0,
