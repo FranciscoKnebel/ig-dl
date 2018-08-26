@@ -10,11 +10,11 @@ function publish() {
   git.add([
     'bin/*'
   ]);
-  git.addTag(pkg.version).exec(() => {
+  git.addTag(pkg.version).then(() => {
     log(`Created tag ${pkg.version}.`);
   });
 
-  git.commit(`Publish build ${pkg.version}.`).exec(() => {
+  git.commit(`Publish build ${pkg.version}.`).then(() => {
     log('Created build commit');
   });
 
