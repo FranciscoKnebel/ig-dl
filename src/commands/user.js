@@ -1,6 +1,6 @@
 /* eslint no-await-in-loop: 0 */
 
-import fs from 'fs-extra';
+import { existsSync, createWriteStream } from 'fs-extra';
 import puppeteer from 'puppeteer';
 
 import { mkdir, log } from '../tools';
@@ -70,8 +70,6 @@ export function scraper(opt) {
     user, amount, dist, screenshot, headless
   } = opt;
 
-  console.log(opt, { headless });
-
   return (async () => {
     const browser = await puppeteer.launch({
       timeout: 0,
@@ -94,17 +92,20 @@ export function scraper(opt) {
     log('Done it!');
 
     log(`Creating file with image links for user '${user}'.`);
-    const stream = fs.createWriteStream(
+    const stream = createWriteStream(
       `${dist}/${user}/pending.txt`,
       { flags: 'a' }
     );
+
+
     for (let i = 0; i < items.length; i += 1) {
       const item = items[i];
 
-      const dir = `${dist}/${user}/${items.length - 1 - i}.${item.id}.jpg`;
+      const dir = `${dist}/${user}/${item.id}.jpg`;
       const url = `${item.a}/media/?size=l`;
 
-      if (fs.existsSync(dir)) {
+      // Ensure no repeat downloads are made
+      if (existsSync(dir)) {
         console.log(`Skipping ${item.id}`);
       } else {
         try {
@@ -118,7 +119,7 @@ export function scraper(opt) {
     log('File written and closed.');
 
     if (screenshot) {
-      await page.screenshot({ path: `${user}.png`, fullPage: true });
+      await page.screenshot({ path: `${dist}/${user}/${user}.png`, fullPage: true });
     }
 
     await browser.close();
@@ -136,13 +137,15 @@ export default function (program) {
     .option('-D, --destination <path>', `Destination folder. (default: "${defaultOptions.dist}")`)
     .option('-S, --save', `After getting the image links, download the image files. (default: ${defaultOptions.user.save})`)
     .option('-h, --no-headless', `Opens browser for debugging. (default: ${defaultOptions['no-headless']})`)
+    .option('-s, --screenshot', 'Saves page screenshot after scrolling is finished')
     .action((user, cmd) => {
       const opt = {
         user,
         amount: cmd.amount || defaultOptions.user.amount,
         dist: cmd.destination || defaultOptions.dist,
         save: cmd.save || defaultOptions.user.save,
-        headless: cmd.headless || defaultOptions['no-headless']
+        screenshot: cmd.screenshot || defaultOptions.screenshot,
+        headless: cmd['no-headless'] || defaultOptions['no-headless']
       };
 
       scraper(opt).then(() => {

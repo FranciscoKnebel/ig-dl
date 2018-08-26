@@ -2,9 +2,12 @@ import request from 'requestretry';
 import { createWriteStream, readFile, unlinkSync, readdirSync, statSync } from 'fs';
 import { join } from 'path';
 
+import { promisify } from 'util';
+
 import { log } from '../tools';
 import defaultOptions from '../default';
 
+const pReadFile = promisify(readFile);
 
 function delayStrategy() {
   // set delay of retry to a random number between 500 and 3500 ms
@@ -20,34 +23,46 @@ export function downloadAndSave(url, filename) {
   // TODO: Guarantee that the file will be downloaded or indicate the error
   // to the user.
   // TODO: only remove successfully download files from pending.txt
-  return request({
-    url,
-    delayStrategy
-  })
-    .pipe(createWriteStream(filename))
-    .on('close', () => log(`Saved ${url} to ${filename}`));
+  return new Promise((resolve) => {
+    request({
+      url,
+      delayStrategy,
+      fullResponse: false
+    })
+      .pipe(createWriteStream(filename))
+      .on('close', () => {
+        log(`Saved ${url} to ${filename}`);
+        resolve(filename);
+      });
+  });
 }
 
 export function downloadUser(user, opt) {
   const dir = `${opt.dist}/${user}`;
 
   log(`Downloading images from "${user}..."`);
-  readFile(`${dir}/pending.txt`, 'utf8', (err, data) => {
-    if (err) {
-      throw err;
-    }
 
-    data.toString().split('\n').forEach((url, i) => {
-      if (url.length > 0) {
-        const file = url.split('/p/')[1].split('/media')[0];
+  return pReadFile(`${dir}/pending.txt`, 'utf8')
+    .then((data) => {
+      const downloads = [];
 
-        log(`[${i}] ${user} => downloading ${url}.`);
-        downloadAndSave(url, `${dir}/${i}.${file}.jpg`);
-      }
+      data.toString().split('\n').forEach((url, i) => {
+        if (url.length > 0) {
+          const file = url.split('/p/')[1].split('/media')[0];
+
+          log(`[${i}] ${user} => downloading ${url}.`);
+          downloads.push(downloadAndSave(url, `${dir}/${file}.jpg`));
+        }
+      });
+
+      return Promise.all(downloads).then((res) => {
+        log('Downloads finished. Removing pending.txt file...');
+        unlinkSync(`${dir}/pending.txt`);
+        log('pending.txt file removed.');
+
+        return res;
+      });
     });
-
-    unlinkSync(`${dir}/pending.txt`);
-  });
 }
 
 export function downloadAllUsers(dir) {

@@ -7,9 +7,10 @@
     "start": "node -r esm src/cli.js",
     "test": "npm run test:lint && npm run test:ava",
     "test:lint": "eslint src build tests",
-    "test:ava": "ava",
+    "test:ava": "nyc --reporter=lcov --reporter=text-summary ava",
+    "test:report": "nyc report",
     "build": "npm run build:bundle && npm run build:executable",
-    "build:bundle": "node -r esm build/bundle.js",
+    "build:bundle": "cross-env NODE_ENV=production node -r esm build/bundle.js",
     "build:executable": "chmod +x bin/cli bin/cli.js",
     "dev": "",
     "precommit": "npm test",
@@ -28,10 +29,8 @@
   "homepage": "https://github.com/FranciscoKnebel/ig-down#readme",
   "dependencies": {
     "@babel/runtime": "^7.0.0-rc.1",
-    "cheerio": "^1.0.0-rc.2",
     "colors": "^1.3.1",
     "commander": "^2.17.1",
-    "dotenv": "^6.0.0",
     "fs-extra": "^7.0.0",
     "moment": "^2.22.2",
     "puppeteer": "^1.6.2",
@@ -51,6 +50,7 @@
     "ava": "1.0.0-beta.7",
     "babel-eslint": "^8.2.6",
     "bufferutil": "^4.0.0",
+    "cross-env": "^5.2.0",
     "del-cli": "^1.1.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
@@ -78,7 +78,10 @@
     "ig-down": "bin/cli"
   },
   "files": [
-    "bin/**/*"
+    "bin/cli"
   ],
-  "preferGlobal": true
+  "preferGlobal": true,
+  "engines": {
+    "node": ">=8.0.0"
+  }
 }

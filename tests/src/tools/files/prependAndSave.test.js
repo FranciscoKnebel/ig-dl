@@ -3,7 +3,7 @@ import test from 'ava';
 import { readFileSync, existsSync } from 'fs';
 import temp from 'tempy';
 
-import { prependAndSave } from '../../../src/tools';
+import { prependAndSave } from '../../../../src/tools';
 
 const paths = [
   './tests/mocks/_file3.mock.js',

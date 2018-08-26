@@ -2,8 +2,8 @@ import test from 'ava';
 
 import { readFileSync } from 'fs';
 
-import { isArrayOfStrings } from '../../helpers/matchers';
-import { readFile } from '../../../src/tools';
+import { isArrayOfStrings } from '../../../helpers/matchers';
+import { readFile } from '../../../../src/tools';
 
 const paths = [
   './tests/mocks/_file1.mock.js',

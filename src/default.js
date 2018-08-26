@@ -7,5 +7,6 @@ export default {
   download: {
     all: false
   },
+  screenshot: false,
   'no-headless': true
 };
