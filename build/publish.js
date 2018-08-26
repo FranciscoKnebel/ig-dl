@@ -8,19 +8,24 @@ log(`Sending new build ${pkg.version} to remote...`);
 git.add([
   'bin/*'
 ]);
-git.addTag(pkg.version).then(() => {
+git.addTag(pkg.version).exec(() => {
   log(`Created tag ${pkg.version}.`);
 });
 
 
-git.commit(`Publish build ${pkg.version}.`).then(() => {
+git.commit(`Publish build ${pkg.version}.`).exec(() => {
   log('Created build commit');
 });
 
 log('Pushing build to remote...');
+function prom(g) {
+  return new Promise(resolve => g.exec(resolve()));
+}
+
 Promise.all([
-  git.push('origin', 'master'),
-  git.pushTags('origin')
+  prom(git.push('origin', 'master')),
+  prom(git.pushTags('origin'))
 ]).then(() => {
   log(`Pushed build and tag ${pkg.version} to origin.`);
 });
+

@@ -73,7 +73,10 @@ export function scraper(opt) {
   return (async () => {
     const browser = await puppeteer.launch({
       timeout: 0,
-      headless
+      headless,
+      args: [
+        process.env.NODE_ENV === 'test' ? '--no-sandbox' : ''
+      ]
     });
     const page = await browser.newPage();
 
