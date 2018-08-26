@@ -6,5 +6,6 @@ export default {
   },
   download: {
     all: false
-  }
+  },
+  'no-headless': true
 };

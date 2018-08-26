@@ -4,6 +4,9 @@ import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
 
 import { mkdir, log } from '../tools';
+import defaultOptions from '../default';
+
+import { downloadUser } from './download';
 
 export function extractor() {
   const extractedElements = document.querySelectorAll('img');
@@ -62,13 +65,17 @@ export async function scroller(page, extractr, targetCount, scrollDelay = 1000) 
   return res;
 }
 
-export default function scraper(opt) {
-  const { user, amount, dist } = opt;
+export function scraper(opt) {
+  const {
+    user, amount, dist, screenshot, headless
+  } = opt;
+
+  console.log(opt, { headless });
 
   return (async () => {
     const browser = await puppeteer.launch({
       timeout: 0,
-      headless: false
+      headless
     });
     const page = await browser.newPage();
 
@@ -110,10 +117,38 @@ export default function scraper(opt) {
     stream.end();
     log('File written and closed.');
 
-    // await page.screenshot({ path: `${user}.png`, fullPage: true });
+    if (screenshot) {
+      await page.screenshot({ path: `${user}.png`, fullPage: true });
+    }
 
     await browser.close();
 
     return items.length;
   })();
+}
+
+export default function (program) {
+  return program
+    .command('user <name>')
+    .alias('u')
+    .description('Get images from user.')
+    .option('-A, --amount <number>', `The minimum amount of images expected to download. (default: ${defaultOptions.user.amount})`)
+    .option('-D, --destination <path>', `Destination folder. (default: "${defaultOptions.dist}")`)
+    .option('-S, --save', `After getting the image links, download the image files. (default: ${defaultOptions.user.save})`)
+    .option('-h, --no-headless', `Opens browser for debugging. (default: ${defaultOptions['no-headless']})`)
+    .action((user, cmd) => {
+      const opt = {
+        user,
+        amount: cmd.amount || defaultOptions.user.amount,
+        dist: cmd.destination || defaultOptions.dist,
+        save: cmd.save || defaultOptions.user.save,
+        headless: cmd.headless || defaultOptions['no-headless']
+      };
+
+      scraper(opt).then(() => {
+        if (opt.save) {
+          downloadUser(opt.user, opt);
+        }
+      });
+    });
 }

@@ -3,6 +3,8 @@ import { createWriteStream, readFile, unlinkSync, readdirSync, statSync } from '
 import { join } from 'path';
 
 import { log } from '../tools';
+import defaultOptions from '../default';
+
 
 function delayStrategy() {
   // set delay of retry to a random number between 500 and 3500 ms
@@ -26,7 +28,7 @@ export function downloadAndSave(url, filename) {
     .on('close', () => log(`Saved ${url} to ${filename}`));
 }
 
-export default function download(user, opt) {
+export function downloadUser(user, opt) {
   const dir = `${opt.dist}/${user}`;
 
   log(`Downloading images from "${user}..."`);
@@ -54,7 +56,29 @@ export function downloadAllUsers(dir) {
 
   log(`Downloading images from ${users.length} users.`);
   for (const user of users) {
-    download(user);
+    downloadUser(user);
   }
 }
 
+export default function (program) {
+  return program
+    .command('download')
+    .alias('d')
+    .description('Download images already obtained from users.')
+    .option('-U, --user <name>', 'Download all pending images from a user.')
+    .option('-A, --all', `Download all pending images from all users. (default: ${defaultOptions.download.all})`)
+    .option('-D, --destination <path>', `Destination folder. (default: "${defaultOptions.dist}")`)
+    .action((cmd) => {
+      const opt = {
+        dist: cmd.destination || defaultOptions.dist
+      };
+
+      if (cmd.all) {
+        downloadAllUsers(opt.dist);
+      } else if (cmd.user) {
+        downloadUser(cmd.user, opt);
+      } else {
+        console.log('"user" or "all" option needs to be defined.');
+      }
+    });
+}
