@@ -1,31 +1,40 @@
 import { log } from '../src/tools';
 
 const pkg = require('../package.json');
-const git = require('simple-git')();
+const git = require('simple-git/promise')();
 
-log(`Sending new build ${pkg.version} to remote...`);
+function publish() {
+  log(`Version ${pkg.version} does not exist.`);
+  log(`Sending new build ${pkg.version} to remote...`);
 
-git.add([
-  'bin/*'
-]);
-git.addTag(pkg.version).exec(() => {
-  log(`Created tag ${pkg.version}.`);
-});
+  git.add([
+    'bin/*'
+  ]);
+  git.addTag(pkg.version).exec(() => {
+    log(`Created tag ${pkg.version}.`);
+  });
 
+  git.commit(`Publish build ${pkg.version}.`).exec(() => {
+    log('Created build commit');
+  });
 
-git.commit(`Publish build ${pkg.version}.`).exec(() => {
-  log('Created build commit');
-});
+  log('Pushing build to remote...');
 
-log('Pushing build to remote...');
-function prom(g) {
-  return new Promise(resolve => g.exec(resolve()));
+  Promise.all([
+    git.push('origin', 'master'),
+    git.pushTags('origin')
+  ]).then(() => {
+    log(`Pushed build and tag ${pkg.version} to origin.`);
+  });
 }
 
-Promise.all([
-  prom(git.push('origin', 'master')),
-  prom(git.pushTags('origin'))
-]).then(() => {
-  log(`Pushed build and tag ${pkg.version} to origin.`);
-});
+git.tags()
+  .then(tags => !tags.all.includes(pkg.version))
+  .then((shouldPublish) => {
+    if (!shouldPublish) {
+      throw Error('Should not publish. Version tag already exists. Have you bumped package.json version?');
+    }
+  })
+  .then(publish)
+  .catch(e => console.error(e));
 
