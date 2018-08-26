@@ -1,6 +1,6 @@
 {
   "name": "ig-down",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "description": "IG CLI downloader.",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,6 @@
     "build:bundle": "cross-env NODE_ENV=production node -r esm build/bundle.js",
     "build:executable": "chmod +x bin/cli bin/cli.js",
     "dev": "",
-    "precommit": "npm test",
     "prepush": "npm test",
     "publish": "npm run build && node -r esm build/publish.js"
   },
