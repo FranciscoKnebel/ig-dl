@@ -6,7 +6,7 @@
 [![Issues](https://img.shields.io/github/issues-raw/FranciscoKnebel/ig-down.svg?style=flat-square)](https://github.com/FranciscoKnebel/ig-down/issues)
 
 [![license](https://img.shields.io/badge/GitHub-Repository-green.svg?style=flat-square)](https://github.com/FranciscoKnebel/ig-down/)
-[![license](https://img.shields.io/github/license/FranciscoKnebel/ig-down.svg?style=flat-square)](https://github.com/FranciscoKnebel/ig-down/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/FranciscoKnebel/ig-down.svg?style=flat-square)](https://github.com/FranciscoKnebel/ig-down/blob/master/LICENSE.md)
 
 ---
 

@@ -48,17 +48,18 @@ export async function scroller(page, extractr, targetCount, scrollDelay = 1000) 
   let items = [];
   try {
     let previousHeight;
+
     while (res.length < targetCount) {
+      previousHeight = await page.evaluate('document.body.scrollHeight');
+      await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
+      await page.waitForFunction(`document.body.scrollHeight > ${previousHeight}`);
+      await page.waitFor(scrollDelay);
+
       items = await page.evaluate(extractr);
 
       for (const element of items) {
         pushIfNotExist(res, element, e => e.id === element.id);
       }
-
-      previousHeight = await page.evaluate('document.body.scrollHeight');
-      await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
-      await page.waitForFunction(`document.body.scrollHeight > ${previousHeight}`);
-      await page.waitFor(scrollDelay);
     }
   } catch (e) { throw e; }
 
@@ -104,11 +105,11 @@ export function scraper(opt) {
     for (let i = 0; i < items.length; i += 1) {
       const item = items[i];
 
-      const dir = `${dist}/${user}/${item.id}.jpg`;
+      const file = `${dist}/${user}/${item.id}.jpg`;
       const url = `${item.a}/media/?size=l`;
 
       // Ensure no repeat downloads are made
-      if (existsSync(dir)) {
+      if (existsSync(file)) {
         console.log(`Skipping ${item.id}`);
       } else {
         try {
@@ -139,7 +140,7 @@ export default function (program) {
     .option('-A, --amount <number>', `The minimum amount of images expected to download. (default: ${defaultOptions.user.amount})`)
     .option('-D, --destination <path>', `Destination folder. (default: "${defaultOptions.dist}")`)
     .option('-S, --save', `After getting the image links, download the image files. (default: ${defaultOptions.user.save})`)
-    .option('-h, --no-headless', `Opens browser for debugging. (default: ${defaultOptions['no-headless']})`)
+    .option('-h, --no-headless', 'Opens browser for debugging.')
     .option('-s, --screenshot', 'Saves page screenshot after scrolling is finished')
     .action((user, cmd) => {
       const opt = {
@@ -148,7 +149,7 @@ export default function (program) {
         dist: cmd.destination || defaultOptions.dist,
         save: cmd.save || defaultOptions.user.save,
         screenshot: cmd.screenshot || defaultOptions.screenshot,
-        headless: cmd['no-headless'] || defaultOptions['no-headless']
+        headless: cmd.headless
       };
 
       scraper(opt).then(() => {

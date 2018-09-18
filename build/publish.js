@@ -8,6 +8,7 @@ function publish() {
   log(`Sending new build ${pkg.version} to remote...`);
 
   git.add([
+    'package.json',
     'bin/*'
   ]);
 

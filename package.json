@@ -1,6 +1,6 @@
 {
   "name": "ig-down",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "IG CLI downloader.",
   "main": "index.js",
   "scripts": {
